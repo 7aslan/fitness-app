@@ -17,11 +17,9 @@ const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
       setBodyParts(["all", ...bodyPartsData]);
     };
     fetchExercisesData();
-    console.log("bodyParts:", bodyParts);
   }, []);
 
   const handleSearch = async () => {
-    console.log("exercisebeforefetching", exercises);
     if (search) {
       const exercisesData = await fetchData(
         "https://exercisedb.p.rapidapi.com/exercises",
@@ -36,7 +34,6 @@ const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
       );
       setSearch("");
       setExercises(searchedExercises);
-      console.log("exercisesafterfetching:", exercises);
     }
   };
 
