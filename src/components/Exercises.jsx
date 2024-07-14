@@ -1,9 +1,44 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { exerciseOptions, fetchData } from "../utils/fetchData";
 
 const Exercises = () => {
   const [search, setSearch] = useState("");
+  const [exercises, setExercises] = useState([]);
+  const [bodyParts, setBodyParts] = useState([]);
+
+  useEffect(() => {
+    const fetchExercisesData = async () => {
+      const bodyPartsData = await fetchData(
+        "https://exercisedb.p.rapidapi.com/exercises/bodyPartList",
+        exerciseOptions
+      );
+      setBodyParts(["all", ...bodyPartsData]);
+    };
+    fetchExercisesData();
+    console.log("bodyParts:", bodyParts);
+  }, []);
+
+  const handleSearch = async () => {
+    console.log("exercisebeforefetching", exercises);
+    if (search) {
+      const exercisesData = await fetchData(
+        "https://exercisedb.p.rapidapi.com/exercises",
+        exerciseOptions
+      );
+      const searchedExercises = exercisesData.filter(
+        (exercise) =>
+          exercise.name.toLowerCase().includes(search) ||
+          exercise.target.toLowerCase().includes(search) ||
+          exercise.equipment.toLowerCase().includes(search) ||
+          exercise.bodyPart.toLowerCase().includes(search)
+      );
+      setSearch("");
+      setExercises(searchedExercises);
+      console.log("exercisesafterfetching:", exercises);
+    }
+  };
 
   return (
     <Stack alignItems="center" mt="37px" justifyContent="center" p="20px">
